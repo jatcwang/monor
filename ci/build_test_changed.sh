@@ -55,8 +55,9 @@ cd "$(git rev-parse --show-toplevel)"
 # Get a list of the current files in package form by querying Bazel.
 files=()
 for file in $(git diff --name-only "${COMMIT_RANGE}" ); do
-  files+=($(bazel query $file))
-  echo $(bazel query $file)
+  res="$(bazel query --jobs="${BAZEL_NUM_JOBS:-HOST_CPUS}" $file)"
+  files+="$res"
+  echo "$res"
 done
 
 # Query for the associated buildables

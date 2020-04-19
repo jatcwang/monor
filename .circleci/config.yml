@@ -21,7 +21,7 @@ jobs:
             - v1-bazel-
       - run:
           name: "Build & Test"
-          command: "bazel test //..."
+          command: "ci/build_test_changed.sh"
       - save_cache:
           key: v1-bazel-{{ checksum ".circleci/cache_key" }}
           paths:
