@@ -1,6 +1,5 @@
 steps:
-  - label: ":hammer: Example Script"
-    command: "script.sh"
-    artifact_paths: "artifacts/*"
+  - label: "Bazel build & test (changed only)"
+    command: "ci/build_test_changed.sh"
     agents:
       queue: "${BUILDKITE_AGENT_META_DATA_QUEUE:-default}"

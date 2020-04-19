@@ -2,3 +2,6 @@
 *.log
 .idea
 /bazel-*
+*.iml
+artifacts
+.metals
