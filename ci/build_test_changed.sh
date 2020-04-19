@@ -81,5 +81,5 @@ echo "$tests"
 # Run the tests if there were results
 if [[ ! -z $tests ]]; then
   echo "Running tests"
-  bazel test --jobs="${BAZEL_NUM_JOBS:-HOST_CPUS}" $tests
+  bazel test --local_ram_resources=3072 --jobs="${BAZEL_NUM_JOBS:-HOST_CPUS}" $tests
 fi

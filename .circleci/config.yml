@@ -8,7 +8,7 @@ jobs:
           username: jatcwang  # can specify string literal values
           password: $TREESCALE_PASSWORD  # or project environment variable reference
     environment:
-      BAZEL_NUM_JOBS: "4"
+      BAZEL_NUM_JOBS: "2"
     steps:
       - checkout
       # concat all BUILD files and WORKSPACE for cache key
@@ -29,5 +29,4 @@ jobs:
           key: v1-bazel-{{ checksum ".circleci/cache_key" }}
           paths:
             - ~/.cache/bazel
-
-
+          when: always
