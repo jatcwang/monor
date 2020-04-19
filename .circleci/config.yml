@@ -15,7 +15,7 @@ jobs:
           command: echo "CI_BRANCH=$CIRCLE_BRANCH" >> $BASH_ENV
       - run:
           name: "Calculate cache key"
-          command: "find -type f -name BUILD -exec cat {} >> .circleci/cache_key \\; && cat WORKSPACE >> .circleci/cache_key"
+          command: "find -type f -name BUILD | sort | xargs cat >> .circleci/cache_key && cat WORKSPACE >> .circleci/cache_key"
       - restore_cache:
           keys:
             - v1-bazel-{{ checksum ".circleci/cache_key" }}
