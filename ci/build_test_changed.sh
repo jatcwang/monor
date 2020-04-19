@@ -70,7 +70,7 @@ buildables=$(bazel query \
 # Run the tests if there were results
 if [[ ! -z $buildables ]]; then
   echo "Building binaries"
-  bazel build --jobs=${BAZEL_NUM_JOBS:-AUTO} $buildables
+  bazel build $buildables
 fi
 
 tests=$(bazel query \
@@ -81,5 +81,5 @@ echo "$tests"
 # Run the tests if there were results
 if [[ ! -z $tests ]]; then
   echo "Running tests"
-  bazel test --local_ram_resources=3072 --jobs="${BAZEL_NUM_JOBS:-HOST_CPUS}" $tests
+  bazel test --local_ram_resources=3072 $tests
 fi

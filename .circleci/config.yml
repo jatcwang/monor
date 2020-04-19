@@ -7,8 +7,6 @@ jobs:
         auth:
           username: jatcwang  # can specify string literal values
           password: $TREESCALE_PASSWORD  # or project environment variable reference
-    environment:
-      BAZEL_NUM_JOBS: "5"
     steps:
       - checkout
       # concat all BUILD files and WORKSPACE for cache key
