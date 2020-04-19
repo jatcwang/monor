@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+set -o pipefail
 #
 # Copyright 2015 The Bazel Authors. All rights reserved.
 #
@@ -44,7 +46,7 @@
 
 COMMIT_RANGE=${COMMIT_RANGE:-$(git merge-base origin/master HEAD)".."}
 
-if [[ $BUILDKITE_BRANCH -eq "master" ]]
+if [ "$CI_BRANCH" == "master" ]
 then
   COMMIT_RANGE='HEAD^'
 fi
@@ -55,8 +57,9 @@ cd "$(git rev-parse --show-toplevel)"
 # Get a list of the current files in package form by querying Bazel.
 files=()
 for file in $(git diff --name-only "${COMMIT_RANGE}" ); do
-  files+=($(bazel query $file))
-  echo $(bazel query $file)
+  res="$(bazel query $file)"
+  files+="$res "
+  echo "$res"
 done
 
 # Query for the associated buildables
@@ -74,8 +77,9 @@ tests=$(bazel query \
     --keep_going \
     --noshow_progress \
     "kind(test, rdeps(//..., set(${files[*]}))) except attr('tags', 'manual', //...)")
+echo "$tests"
 # Run the tests if there were results
 if [[ ! -z $tests ]]; then
   echo "Running tests"
-  bazel test $tests
+  bazel test --local_ram_resources=3072 $tests
 fi
