@@ -3,4 +3,5 @@
 
 TODO: 
 
-Figure out how to use other test libs
+- Update scalatest
+- Handle building deleted files
