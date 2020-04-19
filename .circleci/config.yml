@@ -1,13 +1,30 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
-workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
-    jobs:
-      - welcome/run
+jobs:
+  build:
+    docker:
+      - image: repo.treescale.com/jatcwang/just_bazel:3.0.0
+        auth:
+          username: jatcwang  # can specify string literal values
+          password: $TREESCALE_PASSWORD  # or project environment variable reference
+    environment:
+      EXTRA_BAZEL_ARGS: "--jobs 1"
+    steps:
+      - checkout
+      # concat all BUILD files and WORKSPACE for cache key
+      - run:
+          name: "Calculate cache key"
+          command: "find -type f -name BUILD -exec cat {} >> .circleci/cache_key \\; && cat WORKSPACE >> .circleci/cache_key"
+      - restore_cache:
+          keys:
+            - v1-bazel-{{ checksum ".circleci/cache_key" }}
+            - v1-bazel-
+      - run:
+          name: "Build & Test"
+          command: "bazel test //..."
+      - save_cache:
+          key: v1-bazel-{{ checksum ".circleci/cache_key" }}
+          paths:
+            - ~/.cache/bazel
+
+
