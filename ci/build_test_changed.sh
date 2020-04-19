@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -o pipefail
+set -eo pipefail
 #
 # Copyright 2015 The Bazel Authors. All rights reserved.
 #
