@@ -54,13 +54,11 @@ fi
 # Go to the root of the repo
 cd "$(git rev-parse --show-toplevel)"
 
-echo "$COMMIT_RANGE"
-
 # Get a list of the current files in package form by querying Bazel.
 files=()
 for file in $(git diff --name-only "${COMMIT_RANGE}" ); do
   res="$(bazel query $file)"
-  files+="$res"
+  files+="$res "
   echo "$res"
 done
 
